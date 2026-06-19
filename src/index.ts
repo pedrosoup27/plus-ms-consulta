@@ -10,11 +10,14 @@ import userRoutes from './app-routes';
 import { DefaultDao } from './dados/DefaultDao';
 import { DefaultService } from './service/DefaultService';
 import { DefaultController } from './controllers/DefaultController';
+import { ConsultaRepository } from './dados/ConsultaRepository';
+import { ConsultaService } from './service/ConsultaService';
+import { ConsultaController } from './controllers/ConsultaController';
 
 dotenv.config();
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:3000' // O leão de chácara só deixa entrar quem vier desta URL exata!
+  origin: 'http://localhost:3000'
 }));
 app.use(express.json());
 
@@ -24,9 +27,14 @@ const PORT = Number(process.env.PORT ?? 3001); // const PORT = process.env.PORT 
 
 // // Possivelmente passar as rotas para um arquivo authRoute.ts no futuro
 const router = Router();
-const defaultDao = new DefaultDao();
-const defaultService = new DefaultService(defaultDao);
-const defaultController = new DefaultController(defaultService);
+// const defaultDao = new DefaultDao();
+// const defaultService = new DefaultService(defaultDao);
+// const defaultController = new DefaultController(defaultService);
+
+// Rotas para o serviço de consulta
+const consultaRepository = new ConsultaRepository();
+const consultaService = new ConsultaService(consultaRepository);
+const consultaController = new ConsultaController(consultaService);
 
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -72,6 +80,12 @@ router.get('/healthcheck', (req, res) => { res.status(200).send('OK') })
  *     description: Consulta o estoque das lojas utilizando múltiplos filtros opcionais para auxiliar os funcionários no atendimento.
  *     
  *     parameters:
+ *       - in: query
+ *         name: codProduto
+ *         required: false
+ *         schema:
+ *           type: int
+ *         description: Código do produto (ex. 1, 25, 250)
  *       - in: query
  *         name: nome
  *         required: false
@@ -137,7 +151,7 @@ router.get('/healthcheck', (req, res) => { res.status(200).send('OK') })
  *       400:
  *         description: Erro de validação nos parâmetros de busca.
  */
-router.get('/buscarPeca', (req, res) => defaultController.buscaPeca(req, res));
+router.get('/consultarProdutos', (req, res) => consultaController.consultarProdutos(req, res));
 
 //app.use('/auth', router);
 app.use('/auth', userRoutes);
