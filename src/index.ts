@@ -21,7 +21,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const PORT = Number(process.env.PORT ?? 3001); // const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.PORT ?? 3067); // const PORT = process.env.PORT || 3001;
 
 // swaggerDocs(app, PORT);
 
@@ -157,7 +157,7 @@ router.get('/consultarProdutos', (req, res) => consultaController.consultarProdu
 app.use('/auth', userRoutes);
 
 app.listen(PORT, () => { 
-  console.log(`plus-ms-auth rodando na porta ${PORT}`)
+  console.log(`plus-ms-consulta rodando na porta ${PORT}`)
 
   swaggerDocs(app, PORT);
 });

@@ -1,6 +1,7 @@
 import { IConsultaService } from "../service/interfaces/IConsultaService";
 import { ConsultaRequestDto } from "../service/Dtos/Requests/ConsultaRequestDto";
-import { ConsultaResponseDto } from "../service/Dtos/Responses/ConsultaResponseDto";
+import { PaginatedProductResponseDto } from "../dados/entities/produtos/ProdutoDto";
+
 import express, { Request, Response } from 'express';
 
 export class ConsultaController{

@@ -1,8 +1,8 @@
 import { ConsultaRequestDto } from "../../service/Dtos/Requests/ConsultaRequestDto"
-import { ConsultaResponseDto } from "../../service/Dtos/Responses/ConsultaResponseDto";
+import { PaginatedProductResponseDto } from "../entities/produtos/ProdutoDto";
 
 export interface IConsultaRepository{
-    buscaProduto(consultaRequest: ConsultaRequestDto): Promise<ConsultaResponseDto>;
+    buscaProduto(consultaRequest: ConsultaRequestDto): Promise<PaginatedProductResponseDto>;
     buscaEstoque(codProduto: number): Promise<number>;
     
 }
