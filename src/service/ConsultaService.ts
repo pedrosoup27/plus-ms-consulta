@@ -2,6 +2,7 @@ import { IConsultaService } from "./interfaces/IConsultaService";
 import { IConsultaRepository } from "../dados/interfaces/IConsultaRepository";
 import { ConsultaRequestDto } from "./Dtos/Requests/ConsultaRequestDto";
 import { PaginatedProductResponseDto } from "../dados/entities/produtos/ProdutoDto";
+import { EstoqueFilial } from "../dados/entities/produtos/EstoqueDto";
 
 export class ConsultaService implements IConsultaService{
     constructor(consultaRepository: IConsultaRepository){
@@ -11,8 +12,119 @@ export class ConsultaService implements IConsultaService{
     consultaRepository: IConsultaRepository;
 
     async consultarProdutos(consultaRequestDto: ConsultaRequestDto): Promise<PaginatedProductResponseDto>{
-        const resultado = await this.consultaRepository.buscaProduto(consultaRequestDto);
+        //const resultado = await this.consultaRepository.buscaProduto(consultaRequestDto);
+        const resultadoMock = await this.consultaRepository.buscaProdutoMock();
 
-        return resultado;
+        // var itemsFiltrados = resultado.items;
+        var itemsFiltrados = resultadoMock.items;
+
+        // Filtro por ID do Produto
+        if (consultaRequestDto.idProduto) {
+            itemsFiltrados = itemsFiltrados.filter(item => item.id === String(consultaRequestDto.idProduto));
+        }
+
+        // Filtro por Nome
+        if (consultaRequestDto.nome && consultaRequestDto.nome.trim().length > 0) {
+            itemsFiltrados = itemsFiltrados.filter(item => 
+                item.nome.toLowerCase().includes(consultaRequestDto.nome!.toLowerCase())
+            );
+        }
+
+        // Filtro por Marca/Tipo
+        if (consultaRequestDto.tipo && consultaRequestDto.tipo.trim().length > 0) {
+            itemsFiltrados = itemsFiltrados.filter(item => 
+                item.marca?.toLowerCase().includes(consultaRequestDto.tipo!.toLowerCase())
+            );
+        }
+
+        // Filtro por Faixa de Preço
+        if (consultaRequestDto.precoIni !== undefined && consultaRequestDto.precoIni !== null) {
+            itemsFiltrados = itemsFiltrados.filter(item => item.preco >= consultaRequestDto.precoIni!);
+        }
+
+        if (consultaRequestDto.precoFim !== undefined && consultaRequestDto.precoFim !== null) {
+            itemsFiltrados = itemsFiltrados.filter(item => item.preco <= consultaRequestDto.precoFim!);
+        }
+
+        // Filtro por Tamanho e Cor (nas variantes)
+        if (consultaRequestDto.tamanho || consultaRequestDto.cor) {
+            itemsFiltrados = itemsFiltrados.map(item => ({
+                ...item,
+                variantes: item.variantes.filter(v => {
+                    const tamanhoMatch = !consultaRequestDto.tamanho || 
+                        v.tamanho?.nome === consultaRequestDto.tamanho;
+                    const corMatch = !consultaRequestDto.cor || 
+                        v.cor.toLowerCase() === consultaRequestDto.cor!.toLowerCase();
+                    return tamanhoMatch && corMatch;
+                })
+            }))
+            .filter(item => item.variantes.length > 0); // Remove produtos sem variantes correspondentes
+        }
+
+        // Filtro por Apenas com Estoque
+        if (consultaRequestDto.apenasComEstoque) {
+            itemsFiltrados = itemsFiltrados.filter(item => 
+                item.variantes && item.variantes.length > 0
+            );
+        }
+
+        // Filtro por LojaId (se necessário chamar serviço de estoque)
+        if (consultaRequestDto.lojaId) {
+            // TODO: Implementar filtro por loja via serviço de estoque
+            // itemsFiltrados = await this.filtrarPorLoja(itemsFiltrados, consultaRequestDto.lojaId);
+        }
+
+        resultadoMock.items = itemsFiltrados;
+
+        return resultadoMock;
+
+        // ConsultaRequestDto
+        //  idProduto?: number;         --> Mapeia em id
+        //  nome?: string;              --> Mapeia em nome
+        //  tamanho?: string;           --> Mapeia em tamanho (variantes)
+        //  cor?: string;               --> Mapeia em cor (variantes)
+        //  tipo?: string;              --> Mapeia em marca (fds)
+        //  lojaId?: number;            --> Filtrar pelo serviço de estoque
+        //  apenasComEstoque?: boolean; --> Filtrar pelo serviço de estoque
+        //  precoIni?: number;          --> Filtro por preço
+        //  precoFim?: number;          --> Filtro por preço
+
+        // ProductDetailResponseDto
+        //   id: string;
+        //   nome: string;
+        //   descricao: string | null;
+        //   marca: string | null;
+        //   preco: number;
+        //   ativo: boolean;
+        //   categoriaId: string | null;
+        //   fornecedorId: string | null;
+        //   criadoEm: string;
+        //   atualizadoEm: string;
+        //   variantes: VariantResponseDto[];
+
+        // VariantesResponseDto
+        //   id: string;
+        //   produtoId: string;
+        //   tamanhoId: string;
+        //   tamanho: SizeResponseDto | null;
+        //   cor: string;
+        //   sku: string;
+        //   ativo: boolean;
+        //   criadoEm: string | null;
+        //   atualizadoEm: string | null;
+
+    }
+
+    // TODO: Serviço de consulta de estoque
+    consultarEstoque(idProduto: string): Promise<EstoqueFilial>{
+        const mock: EstoqueFilial = {
+        lojaId: 0,
+        roupaId: idProduto,
+        produtoId: idProduto,
+        saldo: 0,
+        atualizadoEm: new Date().toISOString()
+    };
+
+    return Promise.resolve(mock);
     }
 }

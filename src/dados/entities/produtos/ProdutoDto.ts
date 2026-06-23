@@ -4,7 +4,7 @@
 
 export interface SizeResponseDto {
   id: string;
-  nome: string;
+  nome: string; // Nome do tamanho????????
   descricao: string | null;
   ativo: boolean;
 }

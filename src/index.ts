@@ -6,10 +6,6 @@ import { swaggerSpec } from './swagger';
 import swaggerDocs from './swagger';
 import { ok } from 'node:assert';
 import cors from 'cors';
-import userRoutes from './app-routes';
-import { DefaultDao } from './dados/DefaultDao';
-import { DefaultService } from './service/DefaultService';
-import { DefaultController } from './controllers/DefaultController';
 import { ConsultaRepository } from './dados/ConsultaRepository';
 import { ConsultaService } from './service/ConsultaService';
 import { ConsultaController } from './controllers/ConsultaController';
@@ -51,28 +47,9 @@ const consultaController = new ConsultaController(consultaService);
  */
 router.get('/healthcheck', (req, res) => { res.status(200).send('OK') })
 
-// /**
-//  * @openapi
-//  * /auth/getUserByEmail:
-//  *   get:
-//  *     tags:
-//  *       - User
-//  *     summary: Get user info by email
-//  *     parameters:
-//  *       - in: query
-//  *         name: email
-//  *         required: true
-//  *         schema:
-//  *           type: string
-//  *     responses:
-//  *       200:
-//  *         description: OK
-//  */
-// router.get('/getUserByEmail', (req, res) => defaultController.getUserById(req, res));
-
 /**
  * @openapi
- * /consulta/buscarPeca:
+ * /consulta/buscarPecas:
  *   get:
  *     tags:
  *       - Produtos
@@ -151,10 +128,10 @@ router.get('/healthcheck', (req, res) => { res.status(200).send('OK') })
  *       400:
  *         description: Erro de validação nos parâmetros de busca.
  */
-router.get('/consultarProdutos', (req, res) => consultaController.consultarProdutos(req, res));
+router.get('/buscarPecas', (req, res) => consultaController.consultarProdutos(req, res));
 
 //app.use('/auth', router);
-app.use('/auth', userRoutes);
+app.use('/consulta', router);
 
 app.listen(PORT, () => { 
   console.log(`plus-ms-consulta rodando na porta ${PORT}`)

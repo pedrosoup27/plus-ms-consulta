@@ -1,7 +1,6 @@
 export class ConsultaRequestDto{
-    constructor(codProduto: number,
-    nome: string, tamanho: string, cor: string, tipo: string, lojaId: number, apenasComEstoque: boolean, precoIni: number, precoFim: number){
-        this.codProduto = codProduto;
+    constructor(idProduto?: string, nome?: string, tamanho?: string, cor?: string, tipo?: string, lojaId?: number, apenasComEstoque?: boolean, precoIni?: number, precoFim?: number){
+        this.idProduto = idProduto;
         this.nome = nome;
         this.tamanho = tamanho;
         this.cor = cor;
@@ -14,7 +13,7 @@ export class ConsultaRequestDto{
     }
 
     // Todos os tipos devem ser opcionais como são parâmetros de pesquisa
-    codProduto?: number;
+    idProduto?: string;
     nome?: string;
     tamanho?: string;
     cor?: string;

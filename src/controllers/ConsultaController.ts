@@ -14,15 +14,15 @@ export class ConsultaController{
     async consultarProdutos(req: Request, res: Response){
         try{
             const consultaRequestDto = new ConsultaRequestDto(
-                Number(req.query.codProduto),
-                String(req.query.nome),
-                String(req.query.tamanho),
-                String(req.query.cor),
-                String(req.query.tipo),
-                Number(req.query.lojaId),
+                req.query.idProduto ? String(req.query.idProduto) : undefined,
+                req.query.nome ? String(req.query.nome) : undefined,
+                req.query.tamanho ? String(req.query.tamanho) : undefined,
+                req.query.cor ? String(req.query.cor) : undefined,
+                req.query.tipo ? String(req.query.tipo) : undefined,
+                req.query.lojaId ? Number(req.query.lojaId) : undefined,
                 req.query.apenasComEstoque === "true",
-                Number(req.query.precoIni),
-                Number(req.query.precoFim)
+                req.query.precoIni ? Number(req.query.precoIni) : undefined,
+                req.query.precoFim ? Number(req.query.precoFim) : undefined
             );
 
             const resultado = await this.consultaService.consultarProdutos(consultaRequestDto);
