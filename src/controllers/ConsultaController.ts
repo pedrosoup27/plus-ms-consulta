@@ -35,5 +35,21 @@ export class ConsultaController{
             return res.status(500).json({erro : "Erro interno do servidor"})
         }
     }
+
+    async consultarEstoquePorProduto(req: Request, res: Response){
+        try{
+            const codProduto = req.query.codProduto ? String(req.query.codProduto) : undefined;
+
+            if (!codProduto) {
+                return res.status(400).json({ erro: "codProduto é obrigatório" });
+            }
+
+            const resultado = await this.consultaService.consultarEstoque(codProduto);
+            return res.status(200).json(resultado);
+        }
+        catch{
+            return res.status(500).json({ erro: "Erro interno do servidor" });
+        }
+    }
     
 }

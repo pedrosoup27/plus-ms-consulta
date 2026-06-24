@@ -2,7 +2,7 @@ import { IConsultaService } from "./interfaces/IConsultaService";
 import { IConsultaRepository } from "../dados/interfaces/IConsultaRepository";
 import { ConsultaRequestDto } from "./Dtos/Requests/ConsultaRequestDto";
 import { PaginatedProductResponseDto } from "../dados/entities/produtos/ProdutoDto";
-import { EstoqueFilial } from "../dados/entities/produtos/EstoqueDto";
+import { EstoqueFilial, EstoqueResponseDto } from "../dados/entities/produtos/EstoqueDto";
 
 export class ConsultaService implements IConsultaService{
     constructor(consultaRepository: IConsultaRepository){
@@ -116,15 +116,19 @@ export class ConsultaService implements IConsultaService{
     }
 
     // TODO: Serviço de consulta de estoque
-    consultarEstoque(idProduto: string): Promise<EstoqueFilial>{
-        const mock: EstoqueFilial = {
-        lojaId: 0,
-        roupaId: idProduto,
-        produtoId: idProduto,
-        saldo: 0,
-        atualizadoEm: new Date().toISOString()
-    };
+    async consultarEstoque(idProduto: string): Promise<EstoqueResponseDto>{
+        const mock = await this.consultaRepository.buscaEstoqueMock(idProduto);
 
-    return Promise.resolve(mock);
+        const responseMock: EstoqueResponseDto = {
+            lojaId: 0, // Por hora fixamos a filial em id zero, pois não existe no contexto da equipe estoque
+            roupaId: mock.roupaId,
+            produtoId: mock.produtoId,
+            tamanho: mock.tamanho,
+            cor: mock.cor,
+            saldo: mock.saldo,
+            atualizadoEm: mock.atualizadoEm
+        };
+
+        return responseMock;
     }
 }

@@ -11,7 +11,7 @@ export interface Estoque {
 
 // Estoque filial é um dto criado para considerar a possibilidade de múltiplas lojas diferentes
 export interface EstoqueFilial {
-  lojaId: number;
+  lojaId: string;
   roupaId: string;
   produtoId: string;
   tamanho?: string | undefined;
@@ -23,4 +23,15 @@ export interface EstoqueFilial {
 export interface FiltroEstoquePayload {
   tamanho?: string | undefined;
   cor?: string | undefined;
+}
+
+// Usaremos para responde na API
+export interface EstoqueResponseDto {
+  lojaId: number;
+  roupaId: string;
+  produtoId: string;
+  tamanho?: string; // Opcional
+  cor?: string;     // Opcional
+  saldo: number;
+  atualizadoEm: string;
 }

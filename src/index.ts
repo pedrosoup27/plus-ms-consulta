@@ -128,6 +128,10 @@ router.get('/healthcheck', (req, res) => { res.status(200).send('OK') })
  */
 router.get('/buscarPecas', (req, res) => consultaController.consultarProdutos(req, res));
 
+
+// TODO: Documentação Swagger
+router.get('/buscarEstoque', (req, res) => consultaController.consultarEstoquePorProduto(req, res));
+
 //app.use('/auth', router);
 app.use('/consulta', router);
 

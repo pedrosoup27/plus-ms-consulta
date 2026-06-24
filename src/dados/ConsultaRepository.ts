@@ -3,7 +3,7 @@ import { ConsultaRequestDto } from "../service/Dtos/Requests/ConsultaRequestDto"
 import express, { Request, Response } from 'express';
 import { PaginatedProductResponseDto } from "./entities/produtos/ProdutoDto";
 import { ProductDetailResponseDto } from "./entities/produtos/ProdutoDto";
-
+import { Estoque, EstoqueResponseDto } from "./entities/produtos/EstoqueDto";
 
 
 export class ConsultaRepository implements IConsultaRepository{
@@ -195,9 +195,30 @@ export class ConsultaRepository implements IConsultaRepository{
     };
 }
 
-    async buscaEstoque(codProduto: number): Promise<number>{
+    async buscaEstoque(codProduto: number): Promise<Estoque>{
+        const resultado = await fetch(`http://localhost:3000/estoque/produto/${codProduto}`);
 
-        return 0;
+        const json = await resultado.json();
+
+        try{
+            const dadosEstoque = json as Estoque;
+
+            return dadosEstoque;
+
+        } catch(error){
+            throw new Error("Erro ao converter dados: buscaEstoque (ConsultaRepository)");
+        }
+    }
+
+    async buscaEstoqueMock(codProduto: string): Promise<Estoque>{
+        return {
+            roupaId: codProduto,
+            produtoId: codProduto,
+            tamanho: undefined,
+            cor: undefined,
+            saldo: 10,
+            atualizadoEm: new Date().toISOString()
+        };
     }
     
 }
