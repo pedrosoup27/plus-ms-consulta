@@ -78,40 +78,6 @@ export class ConsultaService implements IConsultaService{
 
         return resultadoMock;
 
-        // ConsultaRequestDto
-        //  idProduto?: number;         --> Mapeia em id
-        //  nome?: string;              --> Mapeia em nome
-        //  tamanho?: string;           --> Mapeia em tamanho (variantes)
-        //  cor?: string;               --> Mapeia em cor (variantes)
-        //  tipo?: string;              --> Mapeia em marca (fds)
-        //  lojaId?: number;            --> Filtrar pelo serviço de estoque
-        //  apenasComEstoque?: boolean; --> Filtrar pelo serviço de estoque
-        //  precoIni?: number;          --> Filtro por preço
-        //  precoFim?: number;          --> Filtro por preço
-
-        // ProductDetailResponseDto
-        //   id: string;
-        //   nome: string;
-        //   descricao: string | null;
-        //   marca: string | null;
-        //   preco: number;
-        //   ativo: boolean;
-        //   categoriaId: string | null;
-        //   fornecedorId: string | null;
-        //   criadoEm: string;
-        //   atualizadoEm: string;
-        //   variantes: VariantResponseDto[];
-
-        // VariantesResponseDto
-        //   id: string;
-        //   produtoId: string;
-        //   tamanhoId: string;
-        //   tamanho: SizeResponseDto | null;
-        //   cor: string;
-        //   sku: string;
-        //   ativo: boolean;
-        //   criadoEm: string | null;
-        //   atualizadoEm: string | null;
 
     }
 
