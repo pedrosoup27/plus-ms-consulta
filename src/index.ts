@@ -12,9 +12,7 @@ import { ConsultaController } from './controllers/ConsultaController';
 
 dotenv.config();
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:3000'
-}));
+app.use(cors());
 app.use(express.json());
 
 const PORT = Number(process.env.PORT ?? 3067); // const PORT = process.env.PORT || 3001;
