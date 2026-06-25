@@ -1,5 +1,5 @@
 {
-  "name": "plus-ms-auth",
+  "name": "plus-ms-consulta",
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
