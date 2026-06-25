@@ -11,7 +11,7 @@ export class ConsultaRepository implements IConsultaRepository{
     }
 
     async buscaProduto(consultaRequest: ConsultaRequestDto): Promise<PaginatedProductResponseDto>{
-        const resultado = await fetch('http://localhost:3002/products?page=1&pageSize=100'); // Endpoint da equipe produtos
+        const resultado = await fetch('http://ms-product:3002/products?page=1&pageSize=100');
         if(!resultado.ok) throw new Error('Erro ao buscar dados');
 
         const json = await resultado.json();
@@ -196,7 +196,7 @@ export class ConsultaRepository implements IConsultaRepository{
 }
 
     async buscaEstoque(codProduto: number): Promise<Estoque>{
-        const resultado = await fetch(`http://localhost:3000/estoque/produto/${codProduto}`);
+        const resultado = await fetch(`http://ms-estoque:3000/estoque/produto/${codProduto}`);
 
         const json = await resultado.json();
 
