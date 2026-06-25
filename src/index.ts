@@ -129,7 +129,31 @@ router.get('/healthcheck', (req, res) => { res.status(200).send('OK') })
 router.get('/buscarPecas', (req, res) => consultaController.consultarProdutos(req, res));
 
 
-// TODO: Documentação Swagger
+/**
+ * @openapi
+ * /consulta/buscarEstoque:
+ *   get:
+ *     tags:
+ *       - Estoque
+ *     summary: Busca o estoque de um produto específico
+ *     description: Consulta o saldo e as informações de estoque de um produto na API de Estoque através do seu código.
+ *     
+ *     parameters:
+ *       - in: query
+ *         name: codProduto
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Código do produto (ex. 1, 25, 250)
+ *
+ *     responses:
+ *       200:
+ *         description: Busca de estoque realizada com sucesso. Retorna as informações do estoque.
+ *       400:
+ *         description: Erro de validação. O parâmetro codProduto é obrigatório.
+ *       500:
+ *         description: Erro interno do servidor ou falha na comunicação com a API de Estoque.
+ */
 router.get('/buscarEstoque', (req, res) => consultaController.consultarEstoquePorProduto(req, res));
 
 //app.use('/auth', router);

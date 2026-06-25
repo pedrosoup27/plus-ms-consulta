@@ -1,5 +1,5 @@
 export class ConsultaRequestDto{
-    constructor(idProduto?: string, nome?: string, tamanho?: string, cor?: string, tipo?: string, lojaId?: number, apenasComEstoque?: boolean, precoIni?: number, precoFim?: number){
+    constructor(idProduto?: string, nome?: string, tamanho?: string, cor?: string, tipo?: string, lojaId?: number, apenasComEstoque?: boolean, precoIni?: number, precoFim?: number, categoriaId?: string){
         this.idProduto = idProduto;
         this.nome = nome;
         this.tamanho = tamanho;
@@ -9,6 +9,7 @@ export class ConsultaRequestDto{
         this.apenasComEstoque = apenasComEstoque;
         this.precoIni = precoIni;
         this.precoFim = precoFim;
+        this.categoriaId = categoriaId;
 
     }
 
@@ -22,5 +23,6 @@ export class ConsultaRequestDto{
     apenasComEstoque?: boolean;
     precoIni?: number;
     precoFim?: number;
+    categoriaId?: string;
 
 }

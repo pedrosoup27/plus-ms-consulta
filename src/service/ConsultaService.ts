@@ -1,7 +1,7 @@
 import { IConsultaService } from "./interfaces/IConsultaService";
 import { IConsultaRepository } from "../dados/interfaces/IConsultaRepository";
 import { ConsultaRequestDto } from "./Dtos/Requests/ConsultaRequestDto";
-import { PaginatedProductResponseDto } from "../dados/entities/produtos/ProdutoDto";
+import { PaginatedConsultaProdutoResponseDto, ConsultaProdutoResponseDto } from "./Dtos/Responses/ConsultaProdutoResponseDto";
 import { EstoqueFilial, EstoqueResponseDto } from "../dados/entities/produtos/EstoqueDto";
 
 export class ConsultaService implements IConsultaService{
@@ -11,12 +11,12 @@ export class ConsultaService implements IConsultaService{
 
     consultaRepository: IConsultaRepository;
 
-    async consultarProdutos(consultaRequestDto: ConsultaRequestDto): Promise<PaginatedProductResponseDto>{
+    async consultarProdutos(consultaRequestDto: ConsultaRequestDto): Promise<PaginatedConsultaProdutoResponseDto>{
         //const resultado = await this.consultaRepository.buscaProduto(consultaRequestDto);
         const resultadoMock = await this.consultaRepository.buscaProdutoMock();
 
         // var itemsFiltrados = resultado.items;
-        var itemsFiltrados = resultadoMock.items;
+        var itemsFiltrados: ConsultaProdutoResponseDto[] = resultadoMock.items as ConsultaProdutoResponseDto[];
 
         // Filtro por ID do Produto
         if (consultaRequestDto.idProduto) {
@@ -34,6 +34,13 @@ export class ConsultaService implements IConsultaService{
         if (consultaRequestDto.tipo && consultaRequestDto.tipo.trim().length > 0) {
             itemsFiltrados = itemsFiltrados.filter(item => 
                 item.marca?.toLowerCase().includes(consultaRequestDto.tipo!.toLowerCase())
+            );
+        }
+
+        // Filtro por CategoriaId
+        if (consultaRequestDto.categoriaId && consultaRequestDto.categoriaId.trim().length > 0) {
+            itemsFiltrados = itemsFiltrados.filter(item => 
+                item.categoriaId === consultaRequestDto.categoriaId
             );
         }
 
@@ -74,9 +81,20 @@ export class ConsultaService implements IConsultaService{
             // itemsFiltrados = await this.filtrarPorLoja(itemsFiltrados, consultaRequestDto.lojaId);
         }
 
+        for (const item of itemsFiltrados) {
+            try {
+                const estoqueInfo = await this.consultaRepository.buscaEstoqueMock(item.id);
+                item.estoque = estoqueInfo.saldo;
+                item.lojaId = 0; // Fixamos a lojaId em 0 (Sede) para refletir a mesma logica do consultarEstoque
+            } catch (e) {
+                item.estoque = 0;
+                item.lojaId = 0;
+            }
+        }
+
         resultadoMock.items = itemsFiltrados;
 
-        return resultadoMock;
+        return resultadoMock as PaginatedConsultaProdutoResponseDto;
 
 
     }

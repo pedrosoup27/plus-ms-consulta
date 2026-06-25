@@ -1,6 +1,5 @@
 import { IConsultaService } from "../service/interfaces/IConsultaService";
 import { ConsultaRequestDto } from "../service/Dtos/Requests/ConsultaRequestDto";
-import { PaginatedProductResponseDto } from "../dados/entities/produtos/ProdutoDto";
 
 import express, { Request, Response } from 'express';
 
@@ -22,7 +21,8 @@ export class ConsultaController{
                 req.query.lojaId ? Number(req.query.lojaId) : undefined,
                 req.query.apenasComEstoque === "true",
                 req.query.precoIni ? Number(req.query.precoIni) : undefined,
-                req.query.precoFim ? Number(req.query.precoFim) : undefined
+                req.query.precoFim ? Number(req.query.precoFim) : undefined,
+                req.query.categoriaId ? String(req.query.categoriaId) : undefined
             );
 
             const resultado = await this.consultaService.consultarProdutos(consultaRequestDto);
